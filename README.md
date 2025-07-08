@@ -103,9 +103,8 @@ curl http://localhost:11434/api/version
 Make sure your `.env` file matches the Ollama server and model configuration:
 
 ```plaintext
-OLLAMA_API_URL=http://localhost:11434/api/generate
-OLLAMA_MODEL=mistral
-OLLAMA_VERSION_URL=http://localhost:11434/api/version
+OLLAMA_MODEL=llama3
+OLLAMA_API=http://localhost:11434
 ```
 
 ---

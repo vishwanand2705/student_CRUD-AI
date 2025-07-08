@@ -8,7 +8,7 @@ Ollama client utility functions.
 import logging
 import requests
 from app.models.student import StudentOut
-from app.core.config import OLLAMA_API_URL, OLLAMA_MODEL, OLLAMA_VERSION_URL
+from app.core.config import OLLAMA_MODEL, OLLAMA_API
 
 logger = logging.getLogger("ollama_client")
 
@@ -17,7 +17,7 @@ def check_ollama_version() -> bool:
     Check if the Ollama API server is reachable and running.
     """
     try:
-        resp = requests.get(OLLAMA_VERSION_URL, timeout=5)
+        resp = requests.get(f'{OLLAMA_API}/api/version', timeout=5)
 
         resp.raise_for_status()
         return True
@@ -62,7 +62,7 @@ def generate_student_summary(student: StudentOut) -> str:
     }
 
     try:
-        response = requests.post(OLLAMA_API_URL, json=payload, timeout=10)
+        response = requests.post(f'{OLLAMA_API}/api/generate', json=payload, timeout=10)
         if response.status_code == 500:
             logger.error(f"Ollama API returned status {response.status_code}: {response.text}")
             return f"Ollama API returned status {response.status_code}"
