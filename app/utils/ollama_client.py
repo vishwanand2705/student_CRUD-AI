@@ -8,7 +8,7 @@ Ollama client utility functions.
 import logging
 import requests
 from app.models.student import StudentOut
-from app.core.config import OLLAMA_MODEL, OLLAMA_API
+from app.core.config import OLLAMA_MODEL, OLLAMA_API, ENABLE_OLLAMA
 
 logger = logging.getLogger("ollama_client")
 
@@ -51,6 +51,9 @@ def generate_student_summary(student: StudentOut) -> str:
     Generate an AI summary for a student using the Ollama API.
     Handles connection, timeout, and server errors gracefully.
     """
+    if not ENABLE_OLLAMA:
+        return f"(Stub) Summary for {student.name}, age {student.age}, email: {student.email}"
+
     if not check_ollama_version():
         return "Ollama API is not reachable or not running."
 

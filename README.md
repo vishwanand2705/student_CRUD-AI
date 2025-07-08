@@ -76,15 +76,15 @@ This will run the Ollama API at `http://localhost:11434` by default.
 
 ---
 
-### 3. **Pull a Model (e.g., mistral)**
+### 3. **Pull a Model (e.g., llama3)**
 
 Before using the API, pull the model you want (as set in your `.env`):
 
 ```sh
-ollama pull mistral
+ollama pull llama3
 ```
 
-Replace `mistral` with your desired model name if different.
+Replace `llama3` with your desired model name if different.
 
 ---
 
@@ -105,6 +105,7 @@ Make sure your `.env` file matches the Ollama server and model configuration:
 ```plaintext
 OLLAMA_MODEL=llama3
 OLLAMA_API=http://localhost:11434
+ENABLE_OLLAMA = True # Set to True to enable Ollama AI integration; Default value is False.
 ```
 
 ---
