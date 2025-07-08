@@ -15,13 +15,24 @@ def create_student(student: StudentCreate) -> StudentOut:
     Create a new student, ensuring unique email.
     """
     with memory_store.store_lock:
-        for s in memory_store.students.values():
-            if s.email == student.email:
+        email_lower = student.email.lower()
+        
+        # Check for existing email
+        for existing_student in memory_store.students.values():
+            if existing_student.email == email_lower:
                 raise ValueError("Email already exists")
+        
+        # Create new student with normalized email and auto-generated ID
         student_id = memory_store.id_counter
-        new_student = StudentOut(id=student_id, **student.model_dump())
-        memory_store.students[student_id] = new_student
         memory_store.id_counter += 1
+        
+        new_student = StudentOut(
+            id=student_id,
+            email=email_lower,
+            **student.model_dump(exclude={"email"})
+        )
+        
+        memory_store.students[student_id] = new_student
         return new_student
 
 def get_all_students() -> List[StudentOut]:
@@ -47,17 +58,21 @@ def update_student(student_id: int, update_data: StudentUpdate) -> StudentOut | 
         if not existing:
             return None
         
-        # Unique email check if email is being updated
-        if update_data.email:
-            for sid, s in memory_store.students.items():
-                if s.email == update_data.email and sid != student_id:
-                    raise ValueError("Email already exists")
-
-        updated_data = existing.model_dump()
-        for key, value in update_data.model_dump(exclude_unset=True).items():
-            updated_data[key] = value
-
-        updated_student = StudentOut(**updated_data)
+        # Get only the fields that are being updated
+        update_dict = update_data.model_dump(exclude_unset=True)
+        
+        # Handle email uniqueness check and normalization
+        if "email" in update_dict:
+            email_lower = update_dict["email"].lower()
+            # Check for duplicates only if email is actually changing
+            if email_lower != existing.email:
+                for sid, student in memory_store.students.items():
+                    if student.email == email_lower and sid != student_id:
+                        raise ValueError("Email already exists")
+            update_dict["email"] = email_lower
+        
+        # Create updated student using model_copy with updates
+        updated_student = existing.model_copy(update=update_dict)
         memory_store.students[student_id] = updated_student
         return updated_student
 
