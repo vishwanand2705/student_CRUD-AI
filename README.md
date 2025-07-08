@@ -106,7 +106,6 @@ Make sure your `.env` file matches the Ollama server and model configuration:
 OLLAMA_API_URL=http://localhost:11434/api/generate
 OLLAMA_MODEL=mistral
 OLLAMA_VERSION_URL=http://localhost:11434/api/version
-OLLAMA_API_KEY=your_ollama_api_key_here
 ```
 
 ---
