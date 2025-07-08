@@ -30,6 +30,6 @@ app.add_middleware(LoggingMiddleware)
 app.include_router(student_routes.router)
 
 # Health check endpoint
-@app.get("/ping", tags=["Health Check"])
+@app.get("/", tags=["Health Check"])
 def ping():
     return {"message": "Server is up and running!"}
