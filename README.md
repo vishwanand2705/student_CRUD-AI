@@ -105,7 +105,7 @@ Make sure your `.env` file matches the Ollama server and model configuration:
 ```plaintext
 OLLAMA_MODEL=llama3
 OLLAMA_API=http://localhost:11434
-ENABLE_OLLAMA = True # Set to True to enable Ollama AI integration; Default value is False.
+ENABLE_OLLAMA = False # Set to True to enable Ollama AI integration;
 ```
 
 ---
